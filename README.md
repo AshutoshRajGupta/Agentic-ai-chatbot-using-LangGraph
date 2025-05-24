@@ -70,10 +70,9 @@ This triggers the AI to:
 3. Return synthesized results
 
 ---
-```
+
 ![image](https://github.com/user-attachments/assets/6a60c2cf-9f00-479f-b40b-f809535756b9)
 
-```
 
 ## 🧩 How It Works (Execution Flow)
 
