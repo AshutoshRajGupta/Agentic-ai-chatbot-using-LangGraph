@@ -86,8 +86,7 @@ graph TD
     tools --> End
 ```
 
-> ![image](https://github.com/user-attachments/assets/eed4f1e1-8d1b-4bd9-9ba4-c794c4736903)
-`.
+
 
 ---
 
