@@ -1,17 +1,34 @@
-
-
 # ui.py
 
 import streamlit as st
 import time
 import os
+import csv
+from datetime import datetime
 import pandas as pd
 from langchain_core.messages import HumanMessage, ToolMessage
 
 from main import graph  # Import the LangGraph pipeline
-from logger import log_tool_usage, tool_usage_stats  # ✅ Import from logger.py
 
 csv_path = "tool_usage_log.csv"
+tool_usage_stats = {}
+
+def log_tool_usage(tool_name, query, response_time):
+    if not os.path.exists(csv_path):
+        with open(csv_path, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["timestamp", "tool_name", "query", "response_time_sec"])
+    with open(csv_path, "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([
+            datetime.now().isoformat(),
+            tool_name,
+            query,
+            round(response_time, 3)
+        ])
+    tool_usage_stats[tool_name] = tool_usage_stats.get(tool_name, 0) + 1
+
+
 
 # Streamlit UI setup
 st.set_page_config(page_title="LangGraph Assistant", layout="wide")
@@ -39,11 +56,10 @@ with tab1:
                 chat_response = []
                 for m in result["messages"]:
                     if isinstance(m, ToolMessage):
-                        # Minimal logging here (only tool name, query, response_time)
-                        log_tool_usage(tool_name=m.name, query=query, response_time=end - start)
-                        chat_response.append(f"🔧 **Tool used: {m.name}**\n\n🧠 {m.content}")
+                        log_tool_usage(m.name, query, end - start)
+                        chat_response.append(f"🔧 *Tool used: {m.name}*\n\n🧠 {m.content}")
                     elif hasattr(m, "content") and m.content:
-                        chat_response.append(f"🗣️ {m.content}")
+                        chat_response.append(f"🗣 {m.content}")
 
                 # Save response in session state
                 st.session_state.chat_history.append((query, chat_response))
