@@ -42,7 +42,7 @@ def tell_joke(input: str) -> str:
 def ask_pdf(input: str) -> str:
     question = input
     try:
-        pdf_path = '../ai-bot/dbms.pdf'
+        pdf_path = 'dbms.pdf'
         vectorstore_path = "faiss_dbms_index"
 
         if not os.path.exists(pdf_path):
