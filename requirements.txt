@@ -1,0 +1,16 @@
+pydantic
+langchain-groq
+langgraph
+langchain-core
+langchain-community
+python-dotenv
+langchain
+arxiv
+wikipedia
+fastapi
+uvicorn==0.22.0
+requests==2.28.2
+sentence-transformers
+pymupdf
+faiss-cpu
+streamlit
