@@ -15,15 +15,10 @@ from tool import get_all_tools
 # ✅ Load .env variables
 load_dotenv()
 
-# ✅ Safely assign only if value exists
-tavily_api_key = os.getenv("TAVILY_API_KEY")
-groq_api_key = os.getenv("GROQ_API_KEY")
 
-if tavily_api_key:
-    os.environ["TAVILY_API_KEY"] = tavily_api_key
-
-if groq_api_key:
-    os.environ["GROQ_API_KEY"] = groq_api_key
+import streamlit as st
+groq_api_key = st.secrets["GROQ_API_KEY"]
+tavily_api_key=st.secrets["TAVILY_API_KEY"]
 
 # Tool and LLM setup
 tools = get_all_tools()
