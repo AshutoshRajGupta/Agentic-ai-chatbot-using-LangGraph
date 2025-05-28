@@ -35,7 +35,7 @@ st.set_page_config(page_title="LangGraph Assistant", layout="wide")
 st.title("🧠 LangGraph AI Assistant")
 
 # Tabs for Chat and Analytics
-tab1, tab2 = st.tabs(["💬 Chatbot", "📊 Tool Usage Analytics"])
+tab1, tab2,tab3 = st.tabs(["💬 Chatbot", "📊 Tool Usage Analytics","📊 Data Analysis"])
 
 with tab1:
     st.subheader("Ask something and see how tools are triggered!")
@@ -83,3 +83,20 @@ with tab2:
             st.dataframe(df)
     else:
         st.info("No tool usage recorded yet.")
+
+# New Data Analysis tab
+with tab3:
+    st.subheader("CSV Data Analysis")
+
+    # Requesting the agent for data analysis
+    if st.button("Analyze CSV Data"):
+        with st.spinner("Analyzing..."):
+            # Trigger the LangGraph agent to perform CSV analysis
+            result = graph.invoke({"messages": [HumanMessage(content="Analyze the CSV data for tool usage stats.")]})
+
+            # Display the analysis result
+            for message in result["messages"]:
+                if isinstance(message, ToolMessage):
+                    st.markdown(f"🔧 *Tool used: {message.name}*\n\n🧠 {message.content}")
+                elif hasattr(message, "content") and message.content:
+                    st.markdown(f"🗣 {message.content}")
