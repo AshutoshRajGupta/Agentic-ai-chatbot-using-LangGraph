@@ -96,11 +96,72 @@ def ask_pdf(input: str) -> str:
         return f"❌ Error in PDF tool: {str(e)}"
     
 
+import pandas as pd
+
+# Tool to read and analyze the CSV data
+@tool(description="Reads and analyzes tool usage data from CSV.")
+def analyze_tool_usage_csv(input: str) -> str:
+    try:
+        # Load the CSV file
+        df = pd.read_csv('tool_usage_log.csv')
+
+        if df.empty:
+            return "⚠️ No data available to analyze."
+
+        # Tool usage analysis
+        tool_usage_counts = df['tool_name'].value_counts().sort_values(ascending=False)
+        total_calls = tool_usage_counts.sum()
+        most_used_tool = tool_usage_counts.idxmax()
+        least_used_tool = tool_usage_counts.idxmin()
+
+        # Response time analysis
+        avg_response_time = df['response_time_sec'].mean()
+        max_response_time = df['response_time_sec'].max()
+        min_response_time = df['response_time_sec'].min()
+        response_time_std = df['response_time_sec'].std()
+
+        # ASCII bar chart
+        max_bar_width = 40
+        max_count = tool_usage_counts.max()
+        bar_chart = "\n".join(
+            f"{tool_name.ljust(25)} | {'█' * int(count / max_count * max_bar_width)} {count}"
+            for tool_name, count in tool_usage_counts.items()
+        )
+
+        # Compile analysis result
+        analysis_result = f"📊 TOOL USAGE SUMMARY\n"
+        analysis_result += f"{'-'*60}\n"
+        analysis_result += f"🔹 Total Tool Calls        : {total_calls}\n"
+        analysis_result += f"🔹 Most Used Tool          : {most_used_tool} ({tool_usage_counts[most_used_tool]} times)\n"
+        analysis_result += f"🔹 Least Used Tool         : {least_used_tool} ({tool_usage_counts[least_used_tool]} times)\n\n"
+
+        analysis_result += f"⏱️ RESPONSE TIME ANALYSIS (in seconds)\n"
+        analysis_result += f"{'-'*60}\n"
+        analysis_result += f"🔹 Average Response Time   : {avg_response_time:.2f} sec\n"
+        analysis_result += f"🔹 Maximum Response Time   : {max_response_time:.2f} sec\n"
+        analysis_result += f"🔹 Minimum Response Time   : {min_response_time:.2f} sec\n"
+        analysis_result += f"🔹 Std Dev of Response Time: {response_time_std:.2f} sec\n\n"
+
+        analysis_result += f"📈 TOOL USAGE BREAKDOWN (Bar Chart)\n"
+        analysis_result += f"{'-'*60}\n"
+        analysis_result += bar_chart
+
+        return analysis_result
+
+    except Exception as e:
+        return f"❌ Error during analysis: {str(e)}"
+
+
+
+
+
+
 def get_all_tools():
     return [
         get_arxiv_tool(),
         get_wikipedia_tool(),
         get_tavily_tool(),
         tell_joke,
-        ask_pdf
+        ask_pdf,
+        analyze_tool_usage_csv
     ]
