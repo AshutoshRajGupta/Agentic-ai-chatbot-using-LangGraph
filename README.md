@@ -1,80 +1,96 @@
-# Agentic-ai-chatbot-using-LangGraph
-
-
-````markdown
-# 🧠 Agentic AI Chatbot with LangGraph + Groq + Multi-Tools
-
-This project is a modular **Agentic AI chatbot system** built using **LangGraph**, **Groq's ultra-fast LLMs**, and a suite of integrated tools like **Arxiv**, **Wikipedia**, and **Tavily Search**. It showcases how AI agents can dynamically decide when to use external tools to fetch information in a reasoning loop.
+Here's a complete and well-structured **README.md** for your GitHub project:
 
 ---
 
-## 🚀 Project Demo
+# 🧠 LangGraph AI Assistant
 
-> The chatbot can answer general questions, search recent AI news, query scholarly articles, and explain concepts using structured agent loops.
-
----
-
-## 🛠 Tech Stack
-
-| Component        | Description |
-|------------------|-------------|
-| 🧩 LangGraph     | Framework for building agentic workflows as graphs |
-| ⚡ Groq LLM       | Extremely fast large language models (`qwen-qwq-32b`) |
-| 🛠 LangChain Tools | Prebuilt tools from `langchain_community` |
-| 🔍 Tavily Search  | Real-time web search API |
-| 📚 Arxiv API      | Academic paper querying tool |
-| 📖 Wikipedia API  | General knowledge fetcher |
-| 🐍 Python         | Programming language |
-| 🔐 dotenv         | Environment variable management |
+A powerful AI assistant built using **LangGraph** and **Groq LLM**, capable of answering user queries and intelligently invoking multiple tools like Wikipedia, Arxiv, PDF retrieval, web search, joke generation, and CSV data analytics. This assistant logs tool usage, performs in-depth analysis of usage data, and provides both a chatbot and analytics interface through **Streamlit**.
 
 ---
 
-## 🧠 Agentic AI Architecture
+## 📌 Table of Contents
 
-This project uses **LangGraph** to create an *agent loop* that decides whether a tool is needed, fetches results using the appropriate tool, and continues reasoning.
-
-### Nodes & Logic:
-
-- **tool_calling_llm**: Uses Groq's LLM with bound tools. If a tool call is generated, the graph branches accordingly.
-- **tools**: Executes the actual tool call (Arxiv, Wikipedia, or Tavily).
-- **Edges**:
-  - If LLM output requires a tool → forward to `tools`
-  - After tool execution → return to `tool_calling_llm` to continue reasoning
-  - If no tool needed → go to `END`
-
-> This loop creates a dynamic agent that mimics thought–action–observation cycles, similar to frameworks like ReAct or AutoGPT.
+* [🚀 Introduction](#-introduction)
+* [🎯 Scope](#-scope)
+* [🧰 Tech Stack](#-tech-stack)
+* [📁 Project Structure](#-project-structure)
+* [✨ Features](#-features)
+* [⚙️ How It Works](#-how-it-works)
+* [🛠️ Tools Used](#-tools-used)
+* [📊 Tool Usage Analytics](#-tool-usage-analytics)
+* [💡 Future Enhancements](#-future-enhancements)
+* [🧪 Setup & Usage](#-setup--usage)
 
 ---
 
-## 🔧 Tools Used
+## 🚀 Introduction
 
-1. **Arxiv Tool**
-   - Queries academic papers using `ArxivQueryRun`
-2. **Wikipedia Tool**
-   - Fetches general info from Wikipedia using `WikipediaQueryRun`
-3. **Tavily Search Tool**
-   - Retrieves current information via web search
+LangGraph AI Assistant is a conversational AI application designed to demonstrate the powerful capabilities of the LangGraph workflow engine, integrated with **Groq's Qwen-QWQ-32B LLM**. It supports natural language interaction and smart tool invocation with dynamic analytics and data visualizations.
 
 ---
 
-## 🧪 Sample Use Cases
+## 🎯 Scope
 
-```python
-messages = graph.invoke({"messages":"What is the recent AI news and then please tell me the recent research paper on blockchain"})
-````
+This project showcases:
 
-This triggers the AI to:
-
-1. Use Tavily to fetch recent AI news
-2. Use Arxiv to search for blockchain research papers
-3. Return synthesized results
+* Integration of **LangGraph** for stateful tool-based conversation management.
+* Use of **Streamlit** to provide an interactive and user-friendly UI.
+* Real-time **tool usage tracking** and visualization.
+* Dynamic CSV **data analysis** via an LLM-enabled tool.
+* Seamless use of external resources (e.g., Wikipedia, Arxiv, Tavily search) to enhance query responses.
 
 ---
 
-![image](https://github.com/user-attachments/assets/6a60c2cf-9f00-479f-b40b-f809535756b9)
+## 🧰 Tech Stack
+
+| Component         | Technology                                             |
+| ----------------- | ------------------------------------------------------ |
+| 🧠 LLM            | [Groq Qwen-QWQ-32B](https://groq.com/)                 |
+| 🔧 Framework      | [LangGraph](https://github.com/langchain-ai/langgraph) |
+| 💬 Language Agent | [LangChain](https://www.langchain.com/)                |
+| 🌐 UI             | [Streamlit](https://streamlit.io/)                     |
+| 📊 Data Handling  | Pandas, CSV, FAISS, HuggingFace                        |
+| 📚 External APIs  | Wikipedia, Arxiv, Tavily, JokeAPI                      |
+
+---
+
+## 📁 Project Structure
+
+```
+├── main.py                 # LangGraph workflow & LLM logic
+├── ui.py                   # Streamlit UI
+├── tool.py                 # Tool definitions and utilities
+├── tool_usage_log.csv      # CSV log for tool usage
+├── dbms.pdf                # Source file for PDF QA
+├── faiss_dbms_index/       # FAISS vector store (auto-generated)
+├── .env                    # API keys
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## ✨ Features
+
+* 💬 **Chatbot Interface** – Natural conversation with automatic tool invocation.
+* 🔧 **Dynamic Tool Triggering** – Tools like Wikipedia, Arxiv, and Tavily Search are triggered based on intent.
+* 📄 **PDF Q\&A** – Ask domain-specific questions about the uploaded DBMS textbook.
+* 🤣 **Joke Generator** – Fetches a programming joke from JokeAPI.
+* 📊 **Usage Analytics** – Tracks tool usage over time and visualizes it with bar charts.
+* 🧠 **CSV Data Analysis Tool** – Analyzes usage logs for statistical insights using Groq LLM.
+* ⏱ **Response Time Logging** – Tracks how long tools take to execute.
+
+---
 
 
-## 🧩 How It Works (Execution Flow)
+🤖 What is LangGraph?
+LangGraph is a stateful, graph-based orchestration framework designed specifically for large language model (LLM) applications. It enables you to construct modular, reactive workflows using simple nodes (functions) and conditional flows between them.
+
+It extends the LangChain ecosystem, allowing you to build complex LLM agents with tool-use behavior, memory, retries, fallbacks, and more—structured like a flowchart.
+
+## ⚙️ How It Works
+
+## 🧩 (Execution Flow)
 
 ```mermaid
 graph TD
@@ -84,65 +100,121 @@ graph TD
     tools --> tool_calling_llm
     tools --> End
 ```
+| Node                   | Functionality                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| **Start**              | Entry point to the workflow.                                                                   |
+| **tool\_calling\_llm** | The LLM node (Groq Qwen-QWQ-32B) generates a response and determines whether a tool is needed. |
+| **tools**              | Invokes the appropriate tool (e.g., joke, PDF, Wikipedia, CSV analysis).                       |
+| **End**                | Terminates the workflow when no tool is needed or after tool output is processed.              |
 
 
+
+1. **User submits a query.**
+2. The **LangGraph** workflow:
+
+   * Adds user input to the state.
+   * Passes it to the Groq-powered LLM.
+   * If tools are needed, it invokes them via `ToolNode`.
+3. Tool usage is logged to `tool_usage_log.csv`.
+4. Results are returned and displayed in the UI.
+5. On the analytics tab, CSV data is visualized and analyzed.
 
 ---
 
-## 📦 Setup Instructions
+## 🛠️ Tools Used
 
-1. Clone the repo
+### 1. 📚 **Wikipedia Tool**
 
-```bash
-git clone https://github.com/your-username/Agentic-ai-chatbot-using-LangGraph.git
-cd Agentic-ai-chatbot-using-LangGraph
-```
+Fetches concise information using the Wikipedia API.
 
-2. Create `.env` and add:
+### 2. 📖 **Arxiv Tool**
+
+Searches academic papers from Arxiv related to the user query.
+
+### 3. 🌍 **Tavily Web Search**
+
+Retrieves current web results for real-time information.
+
+### 4. 🤣 **Programming Joke Tool**
+
+Uses JokeAPI to deliver a random programming-related joke.
+
+### 5. 📘 **PDF Question Answering Tool**
+
+* Reads a domain-specific textbook (`dbms.pdf`).
+* Creates or loads FAISS vector index.
+* Answers questions using RetrievalQA with Groq LLM.
+
+### 6. 📈 **CSV Analysis Tool**
+
+* Reads `tool_usage_log.csv`.
+* Computes:
+
+  * Total tool calls
+  * Most/least used tools
+  * Average, min, max, and std deviation of response time
+* Displays an ASCII bar chart of tool usage.
+
+---
+
+## 📊 Tool Usage Analytics
+
+> Automatically logs and analyzes tool invocations.
+
+Logged fields:
+
+* Timestamp
+* Tool Name
+* Query
+* Response Time (sec)
+
+Visualization:
+
+* Bar chart of tool usage frequency
+* Raw data table
+* Detailed LLM-based statistical summary (via analyze\_tool\_usage\_csv tool)
+
+---
+
+## 💡 Future Enhancements
+
+* Upload and analyze any PDF.
+* User authentication & session storage.
+* Real-time web search fallback if tools fail.
+* Scheduled analytics report via email.
+* Admin dashboard for tool monitoring.
+
+---
+
+## 🧪 Setup & Usage
+
+### 🔧 Prerequisites
+
+* Python 3.9+
+* Create a `.env` file:
 
 ```env
-TAVILY_API_KEY=your_api_key
-GROQ_API_KEY=your_api_key
+TAVILY_API_KEY=your_tavily_api_key
+GROQ_API_KEY=your_groq_api_key
 ```
 
-3. Install dependencies
+### 📦 Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the ipynb file
+### 🚀 Run the App
 
-
----
-
-## 📌 Key Highlights
-
-* 🌐 Real-time AI agent with reasoning + tool use
-* 🏗 Powered by LangGraph’s graph-based state management
-* 🚀 Lightning-fast responses using Groq’s `qwen-qwq-32b`
-* 🧠 Can fetch, synthesize, and reason over multi-source information
-
----
-
-## 📄 License
-
-MIT License. See `LICENSE` file.
-
----
-
-## 💬 Acknowledgments
-
-* [LangChain](https://github.com/langchain-ai/langchain)
-* [Groq](https://groq.com/)
-* [LangGraph](https://github.com/langchain-ai/langgraph)
-* [Tavily API](https://www.tavily.com/)
-* [Arxiv API](https://arxiv.org/help/api/)
-* [Wikipedia API](https://pypi.org/project/wikipedia/)
-
----
-
-> ✨ Feel free to fork or contribute to expand agent capabilities!
-
+```bash
+streamlit run ui.py
 ```
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+
 
