@@ -1,8 +1,6 @@
-Here's a complete and well-structured **README.md** for your GitHub project:
 
----
 
-# 🧠 LangGraph AI Assistant
+# 🧠 LangGraph AI Assistant  - Askie
 
 A powerful AI assistant built using **LangGraph** and **Groq LLM**, capable of answering user queries and intelligently invoking multiple tools like Wikipedia, Arxiv, PDF retrieval, web search, joke generation, and CSV data analytics. This assistant logs tool usage, performs in-depth analysis of usage data, and provides both a chatbot and analytics interface through **Streamlit**.
 
