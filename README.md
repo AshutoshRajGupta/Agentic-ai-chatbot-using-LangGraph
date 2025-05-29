@@ -174,6 +174,17 @@ Visualization:
 
 ---
 
+
+### 📘 **OUTPUT**
+![WhatsApp Image 2025-05-28 at 00 26 49_0097ab59](https://github.com/user-attachments/assets/892fa9a6-881f-4cb8-8d35-346fdebddb06)
+![WhatsApp Image 2025-05-28 at 00 26 23_37e5fa86](https://github.com/user-attachments/assets/277ee588-3df0-48e9-bf67-44d728093a9f)
+![WhatsApp Image 2025-05-28 at 00 26 00_a75f4049](https://github.com/user-attachments/assets/28fface0-4c79-47bd-8ef5-daf923a5c7bd)
+![WhatsApp Image 2025-05-28 at 00 27 40_a2b1bafb](https://github.com/user-attachments/assets/70b4e862-c91a-4ab4-aa9c-e620b9d95532)
+![WhatsApp Image 2025-05-28 at 00 28 19_56beee53](https://github.com/user-attachments/assets/8d32254c-7524-48a4-a3eb-7efc83c0b952)
+![WhatsApp Image 2025-05-28 at 00 27 56_eb78d001](https://github.com/user-attachments/assets/f73652b8-6d88-4cbf-bca2-c364e8f422cc)
+![WhatsApp Image 2025-05-28 at 00 27 14_dbfdd0d8](https://github.com/user-attachments/assets/3f186ea9-2def-405a-bd52-ba6dd017493b)
+
+
 ## 💡 Future Enhancements
 
 * Upload and analyze any PDF.
