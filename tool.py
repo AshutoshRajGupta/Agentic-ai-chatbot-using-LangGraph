@@ -1,20 +1,20 @@
 import os
 import requests
-
+import asyncio
 from langchain.tools import tool
-from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun
+from langchain_community.tools import  WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_groq import ChatGroq
+from langchain_core.messages import HumanMessage
 from langchain.document_loaders import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 
+
 # Predefined Tools
-def get_arxiv_tool():
-    return ArxivQueryRun(api_wrapper=ArxivAPIWrapper(top_k_results=2, doc_content_chars_max=500))
 
 def get_wikipedia_tool():
     return WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=500))
@@ -36,13 +36,63 @@ def tell_joke(input: str) -> str:
         return f"Error fetching joke: {e}"
     
 
-    
+
+@tool(description="Get current weather for a given city using WeatherAPI with helpful tips.")
+def get_weather(city: str) -> str:
+    try:
+        api_key = os.getenv("WEATHERAPI_KEY")
+        if not api_key:
+            return "❌ WeatherAPI key is missing."
+
+        url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}"
+        response = requests.get(url).json()
+
+        if "error" in response:
+            return f"❌ Weather not found for '{city}'."
+
+        location = response["location"]["name"]
+        temp = response["current"]["temp_c"]
+        condition = response["current"]["condition"]["text"].lower()
+        humidity = response["current"]["humidity"]
+        wind = response["current"]["wind_kph"]
+
+        # Weather tip logic
+        tips = []
+        if "rain" in condition:
+            tips.append("☔ It's rainy – don't forget your umbrella!")
+        if "sunny" in condition or "clear" in condition:
+            tips.append("🧴 It's sunny – stay hydrated and use sunscreen.")
+        if temp < 10:
+            tips.append("🧣 It's quite cold – wear warm clothes.")
+        elif temp > 30:
+            tips.append("🔥 It's hot – avoid going out in the afternoon.")
+        if wind > 20:
+            tips.append("💨 It's windy – avoid loose clothing.")
+
+        tip_text = "\n".join(tips) if tips else "✅ No special tips. Enjoy the weather!"
+
+        return (
+            f"🌤️ **Weather in {location}**\n"
+            f"- Temperature: {temp}°C\n"
+            f"- Condition: {condition.title()}\n"
+            f"- Humidity: {humidity}%\n"
+            f"- Wind Speed: {wind} km/h\n\n"
+            f"💡 **Tips:**\n{tip_text}"
+        )
+
+    except Exception as e:
+        return f"❌ Error fetching weather: {e}"
+
+
+
+
+
 
 @tool(description="Use this tool to answer questions from the uploaded DBMS textbook PDF.")
 def ask_pdf(input: str) -> str:
     question = input
     try:
-        pdf_path = 'dbms.pdf'
+        pdf_path = '../ai-bot/dbms.pdf'
         vectorstore_path = "faiss_dbms_index"
 
         if not os.path.exists(pdf_path):
@@ -154,14 +204,13 @@ def analyze_tool_usage_csv(input: str) -> str:
 
 
 
-
-
 def get_all_tools():
     return [
-        get_arxiv_tool(),
+       
         get_wikipedia_tool(),
         get_tavily_tool(),
+        get_weather,
         tell_joke,
         ask_pdf,
-        analyze_tool_usage_csv
+        analyze_tool_usage_csv,
     ]
