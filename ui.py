@@ -35,7 +35,7 @@ st.set_page_config(page_title="LangGraph Assistant", layout="wide")
 st.title("🧠 LangGraph AI Assistant")
 
 # Tabs for Chat and Analytics
-tab1, tab2,tab3 = st.tabs(["💬 Chatbot", "📊 Tool Usage Analytics","📊 Data Analysis"])
+tab1, tab2,tab3, tab4, tab5 = st.tabs(["💬 Chatbot","🌦️ Weather Info", "📘 Ask DBMS PDF", "📊 Tool Usage Analytics","📊 Data Analysis"])
 
 with tab1:
     st.subheader("Ask something and see how tools are triggered!")
@@ -71,7 +71,51 @@ with tab1:
             st.markdown(r)
         st.markdown("---")
 
+# Weather Info Tab
 with tab2:
+    st.subheader("🌦️ Get Current Weather Info")
+
+    city = st.text_input("Enter city name", placeholder="e.g., Delhi, New York")
+
+    if st.button("Get Weather"):
+        if not city.strip():
+            st.warning("Please enter a valid city name.")
+        else:
+            with st.spinner("Fetching weather..."):
+                result = graph.invoke({"messages": [HumanMessage(content=f"What is the weather in {city}?")]})
+                for message in result["messages"]:
+                    if isinstance(message, ToolMessage):
+                        st.markdown(f"🔧 *Tool used: {message.name}*\n\n🧠 {message.content}")
+                        log_tool_usage(message.name, city, 0)  # Optional: log weather tool usage
+                    elif hasattr(message, "content") and message.content:
+                        st.markdown(f"🗣 {message.content}")
+
+# PDF QA Tab
+with tab3:
+    st.subheader("📘 Ask Questions from DBMS PDF")
+
+    pdf_question = st.text_input("Ask a question based on the DBMS PDF", placeholder="e.g., What is normalization?")
+
+    if st.button("Ask PDF"):
+        if not pdf_question.strip():
+            st.warning("Please enter a valid question.")
+        else:
+            with st.spinner("Looking through the PDF..."):
+                start = time.time()
+                result = graph.invoke({"messages": [HumanMessage(content=pdf_question)]})
+                end = time.time()
+
+                for message in result["messages"]:
+                    if isinstance(message, ToolMessage):
+                        st.markdown(f"🔧 *Tool used: {message.name}*\n\n🧠 {message.content}")
+                        log_tool_usage(message.name, pdf_question, end - start)
+                    elif hasattr(message, "content") and message.content:
+                        st.markdown(f"🗣 {message.content}")
+
+
+
+
+with tab4:
     st.subheader("Tool Usage Analytics")
 
     if os.path.exists(csv_path):
@@ -85,7 +129,7 @@ with tab2:
         st.info("No tool usage recorded yet.")
 
 # New Data Analysis tab
-with tab3:
+with tab5:
     st.subheader("CSV Data Analysis")
 
     # Requesting the agent for data analysis
@@ -100,3 +144,6 @@ with tab3:
                     st.markdown(f"🔧 *Tool used: {message.name}*\n\n🧠 {message.content}")
                 elif hasattr(message, "content") and message.content:
                     st.markdown(f"🗣 {message.content}")
+
+
+
