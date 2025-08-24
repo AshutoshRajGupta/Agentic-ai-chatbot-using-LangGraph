@@ -22,7 +22,7 @@ tavily_api_key=st.secrets["TAVILY_API_KEY"]
 
 # Tool and LLM setup
 tools = get_all_tools()
-llm = ChatGroq(model='qwen-qwq-32b').bind_tools(tools=tools)
+llm = ChatGroq(model='gemma2-9b-it').bind_tools(tools=tools)
 
 # LangGraph State
 class State(TypedDict):
@@ -39,3 +39,4 @@ builder.add_edge(START, "tool_calling_llm")
 builder.add_conditional_edges("tool_calling_llm", tools_condition)
 builder.add_edge("tools", "tool_calling_llm")
 graph = builder.compile()
+
