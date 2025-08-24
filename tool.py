@@ -129,7 +129,7 @@ def ask_pdf(input: str) -> str:
         print("[INFO] Loading Groq LLM...")
         llm = ChatGroq(
             temperature=0,
-            model_name="qwen-qwq-32b"
+            model_name="gemma2-9b-it"
         )
 
         print("[INFO] Setting up RetrievalQA chain...")
@@ -214,3 +214,4 @@ def get_all_tools():
         ask_pdf,
         analyze_tool_usage_csv,
     ]
+
